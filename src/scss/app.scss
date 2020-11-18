@@ -1,0 +1,22 @@
+@import 'variables';
+@import 'fonts';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  background-color: $background-color;
+}
+body {
+  background-color: $white;
+  border-radius: 3px;
+  color: $primary;
+  max-width: 960px;
+  margin: 1vh auto;
+  padding: 2vh 5vw;
+}
+
+// .wrapper {
+// }
