@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { Form } from '../components';
+import { apiUrl } from '../config';
+
 export const Edit = ({ location }) => {
   const [product, setProduct] = useState({
     title: '',
@@ -17,47 +20,34 @@ export const Edit = ({ location }) => {
   }, [id]);
 
   const getData = async (id) => {
-    let uri = `http://localhost:5000/products?id=${id}`;
-    const res = await fetch(uri);
+    const res = await fetch(`${apiUrl}/products/?id=${id}`);
     const data = await res.json();
     setProduct(...data);
   };
 
   const handleChange = (e) => {
-    // e.preventDefault();
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  // 404 status
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('submit');
-    history.push(`/main`);
+    await fetch(`${apiUrl}/products/?id=${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    });
+    history.push(`/`);
   };
 
   return (
-    <div>
-      <h1>Edit</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type='text'
-          value={product.title}
-          name='title'
-          onChange={(e) => handleChange(e)}
-        />
-        <input
-          type='text'
-          value={product.price}
-          name='price'
-          onChange={(e) => handleChange(e)}
-        />
-        <textarea
-          type='text'
-          value={product.description}
-          name='description'
-          onChange={(e) => handleChange(e)}
-        />
-        <input type='submit' value='Save' />
-      </form>
-    </div>
+    <Form
+      title={'Edit product'}
+      product={product}
+      handleSubmit={handleSubmit}
+      handleChange={handleChange}
+    />
   );
 };

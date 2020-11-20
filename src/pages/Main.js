@@ -1,68 +1,130 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
-export const Main = () => {
-  const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState('');
+import { CardView, Search, Loading, Pagination } from '../components';
+import {
+  Context,
+  DISABLE_BTN_TRUE,
+  DISABLE_BTN_FALSE,
+  SET_DATA_FETCH_TRUE,
+  SET_DATA_FETCH_FALSE,
+  SET_PRODUCTS,
+} from '../context/';
 
-  useEffect(() => {
-    getData();
-  }, [search]);
+import { apiUrl } from '../config';
+
+export const Main = () => {
+  const [search, setSearch] = useState('');
+  const [order] = useState('asc');
+  const [sort] = useState('title');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const history = useHistory();
 
-  const getData = async (sort = 'price', order = 'asc') => {
-    let query = `?_sort=${sort}&_order=${order}&q=${search}`;
-    let uri = `http://localhost:5000/products${query}`;
-    const res = await fetch(uri);
-    const products = await res.json();
-    setProducts(products);
+  const [state, dispatch] = useContext(Context);
+
+  const { dataFetch, disableBtn, products } = state;
+  console.log(products.length, currentPage);
+
+  useEffect(() => {
+    getData();
+  }, [search, currentPage]);
+
+  const getData = async () => {
+    dispatch({ type: SET_DATA_FETCH_TRUE });
+
+    const query = `?_sort=${sort}&_order=${order}&title_like=${search}&_limit=${itemsPerPage}&_page=${currentPage}`;
+    const url = `${apiUrl}/products${query}`;
+    console.log(url);
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data);
+    dispatch({ type: SET_PRODUCTS, payload: data });
+    dispatch({ type: SET_DATA_FETCH_FALSE });
   };
 
-  const handleEditClick = (id) => {
+  const handleCreateBtn = () => {
+    history.push(`/create`);
+  };
+
+  const handleEditBtn = (id) => {
     history.push(`/edit`, id);
   };
 
-  const handleDeleteClick = async (id) => {
-    await fetch(`http://localhost:5000/products/${id}`, {
+  const handleDeleteBtn = async (id) => {
+    dispatch({ type: DISABLE_BTN_TRUE });
+    await fetch(`${apiUrl}/products/${id}`, {
       method: 'DELETE',
     });
+    dispatch({ type: DISABLE_BTN_FALSE });
   };
 
-  const handleCreateClick = () => {
-    history.push(`/create`);
+  const handleAddToCartBtn = async (id) => {
+    dispatch({ type: DISABLE_BTN_TRUE });
+    const product = products.filter((item) => item.id === id);
+
+    const toCart = {
+      id: product[0].id,
+      title: product[0].title,
+      description: product[0].description,
+      price: product[0].price,
+      quantity: 1,
+    };
+
+    await fetch(`${apiUrl}/products/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ inCart: true }),
+    });
+
+    await fetch(`${apiUrl}/cart/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(toCart),
+    });
+
+    dispatch({ type: DISABLE_BTN_FALSE });
   };
+
+  // Pagination calc
+  //   Get current posts
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+
+  //   Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  if (dataFetch) return <Loading />;
 
   return (
     <div className='wrapper'>
       <h1>Main</h1>
+      <div className='tools'>
+        <Search getQuery={setSearch} />
 
-      <form>
-        <input
-          type='text'
-          placeholder='Search...'
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </form>
-
-      <button onClick={handleCreateClick}>Create</button>
-
-      <ul>
-        {products.map((item) => (
-          <li key={item.id}>
-            <div>
-              <h2>{item.title}</h2>
-              <h2>{item.price}</h2>
-              <p>{item.description}</p>
-            </div>
-            <div>
-              <button onClick={() => handleEditClick(item.id)}>Edit</button>
-              <button onClick={() => handleDeleteClick(item.id)}>Delete</button>
-              <button disabled={item.inCart}>Add to cart</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+        <button className='primary' onClick={handleCreateBtn}>
+          Create
+        </button>
+      </div>
+      <CardView
+        type='product'
+        disableBtn={disableBtn}
+        array={products}
+        firstBtn={handleEditBtn}
+        secondBtn={handleAddToCartBtn}
+        thirdBtn={handleDeleteBtn}
+      />
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItems={products.length}
+        paginate={paginate}
+      />
     </div>
   );
 };

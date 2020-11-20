@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { Form } from '../components';
+import { apiUrl } from '../config';
+
 export const Create = () => {
   const [product, setProduct] = useState({
     title: '',
@@ -19,7 +22,7 @@ export const Create = () => {
       inCart: false,
     };
 
-    await fetch('http://localhost:5000/products', {
+    await fetch(`${apiUrl}/products`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -29,40 +32,20 @@ export const Create = () => {
   };
 
   const handleChange = (e) => {
-    // e.preventDefault();
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
     createProduct();
-    history.push(`/main`);
+    history.push(`/`);
   };
 
   return (
-    <div>
-      <h1>Create</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type='text'
-          value={product.title}
-          name='title'
-          onChange={(e) => handleChange(e)}
-        />
-        <input
-          type='text'
-          value={product.price}
-          name='price'
-          onChange={(e) => handleChange(e)}
-        />
-        <textarea
-          type='text'
-          value={product.description}
-          name='description'
-          onChange={(e) => handleChange(e)}
-        />
-        <input type='submit' value='Save' />
-      </form>
-    </div>
+    <Form
+      title={'Create product'}
+      product={product}
+      handleSubmit={handleSubmit}
+      handleChange={handleChange}
+    />
   );
 };

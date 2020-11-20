@@ -6,10 +6,11 @@ export const Navbar = () => {
 
   return (
     <nav>
-      <h1>Navbar</h1>
       <ul>
         <li>
-          <Link to='/main'>Home</Link>
+          <Link to='/'>
+            <h1>WallSmart</h1>
+          </Link>
         </li>
         <li>
           <Link to='/cart'>Cart</Link>

@@ -1,3 +1,12 @@
+Todo:
+1 pagination -ok
+2 search
+3 filter -ok
+4 add to cart -ok
+5 cart -ok
+6 prop-types
+7 beutify -ok
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

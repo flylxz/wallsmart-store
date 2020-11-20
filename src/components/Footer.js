@@ -1,7 +1,10 @@
 export const Footer = () => {
   return (
-    <div>
-      <h1>Footer</h1>
-    </div>
+    <footer>
+      <h5>
+        {new Date().toLocaleDateString('en-US', { year: 'numeric' })} &copy;
+        flylxz corp
+      </h5>
+    </footer>
   );
 };
