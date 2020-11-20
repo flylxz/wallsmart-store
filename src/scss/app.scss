@@ -153,6 +153,35 @@ footer {
     }
   }
 }
+
+.search {
+  form {
+    input {
+      margin: 0 0.5rem;
+      background-color: $white;
+    }
+  }
+}
+
+.sorting {
+  display: flex;
+  align-items: center;
+  ul {
+    border: 0.1rem solid $secondary;
+    border-radius: $radius;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0.2rem;
+
+    li {
+      padding: 0.2rem;
+      &.active {
+        color: $accent;
+      }
+    }
+  }
+}
+
 // products
 .products {
   display: flex;
@@ -268,8 +297,11 @@ footer {
   margin: 1rem;
   padding: 2rem;
 
-  li > * {
+  li {
     color: $primary;
+    &.active {
+      color: $accent;
+    }
   }
 }
 

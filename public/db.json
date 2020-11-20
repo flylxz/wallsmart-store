@@ -47,7 +47,7 @@
       "title": "Opel",
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui?",
       "price": 400,
-      "inCart": false
+      "inCart": true
     },
     {
       "id": "jop3ymxur9",
@@ -140,6 +140,13 @@
       "title": "Citroen",
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui?",
       "price": 200,
+      "quantity": 1
+    },
+    {
+      "id": "vbrrcrvb9lg",
+      "title": "Opel",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui?",
+      "price": 400,
       "quantity": 1
     }
   ]
