@@ -49,7 +49,7 @@ export const Main = () => {
     console.log(url);
     const res = await fetch(url);
     const data = await res.json();
-    setTotalPage(res.headers.get('X-Total-Count'));
+    setTotalPage(Math.ceil(res.headers.get('X-Total-Count') / itemsPerPage));
 
     dispatch({ type: SET_PRODUCTS, payload: data });
     dispatch({ type: SET_DATA_FETCH_FALSE });
@@ -135,12 +135,13 @@ export const Main = () => {
         thirdBtn={handleDeleteBtn}
       />
 
-      <Pagination
-        itemsPerPage={itemsPerPage}
-        totalItems={totalPage}
-        paginate={paginate}
-        active={currentPage}
-      />
+      {totalPage > 1 && (
+        <Pagination
+          totalPage={totalPage}
+          paginate={paginate}
+          active={currentPage}
+        />
+      )}
     </div>
   );
 };

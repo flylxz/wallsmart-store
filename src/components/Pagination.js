@@ -1,7 +1,7 @@
-export const Pagination = ({ itemsPerPage, totalItems, paginate, active }) => {
+export const Pagination = ({ totalPage, paginate, active }) => {
   const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+  for (let i = 1; i <= totalPage; i++) {
     pageNumbers.push(i);
   }
 

@@ -32,7 +32,7 @@ export const Edit = ({ location }) => {
   // 404 status
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`${apiUrl}/products/?id=${id}`, {
+    await fetch(`${apiUrl}/products/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

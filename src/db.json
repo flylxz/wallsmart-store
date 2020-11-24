@@ -47,7 +47,7 @@
       "title": "Opel",
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui?",
       "price": 400,
-      "inCart": false
+      "inCart": true
     },
     {
       "id": "jop3ymxur9",
@@ -118,6 +118,13 @@
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui?",
       "price": 900,
       "inCart": false
+    },
+    {
+      "id": "ls05OsQ",
+      "title": "Zaz",
+      "description": "Super jet",
+      "price": "125",
+      "inCart": false
     }
   ],
   "cart": [
@@ -126,6 +133,13 @@
       "title": "Audi",
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui?",
       "price": 100,
+      "quantity": 4
+    },
+    {
+      "id": "vbrrcrvb9lg",
+      "title": "Opel",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui?",
+      "price": 400,
       "quantity": 1
     }
   ]
